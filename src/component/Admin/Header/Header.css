@@ -1,0 +1,24 @@
+.Header{
+    height:10%;
+    width:100%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: center;
+    align-items: center;
+    border-bottom: solid 1px lightgray;
+}
+
+.Header__logo{
+    width:100px;
+    height:100px;
+}
+
+.Header__button{
+    padding:10px 20px;
+    margin-right: 15px;
+    width:100px;
+    height:50px;
+}
+

@@ -1,0 +1,12 @@
+.sidebar{
+    flex:0.3;
+    border-right: 1px solid lightgray;
+}   
+
+.sidebar__main{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}

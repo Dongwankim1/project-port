@@ -1,0 +1,11 @@
+.DashScreen{
+    position:relative;
+
+    justify-content: center;
+}
+
+
+.DashBody{
+    display:flex;
+    height: 90vh;
+}
