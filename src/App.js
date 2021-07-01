@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import Home from './component/Home/Home';
 import Admin from './component/Admin/Admin';
 import DashBoard from './component/Admin/DashBoard/DashBoard';
+import BoardList from './component/Admin/BoardList/BoardList';
 function App() {
   const user = null;
 

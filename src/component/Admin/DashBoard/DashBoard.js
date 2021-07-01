@@ -1,31 +1,32 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import './Dashboard.css';
 import { auth } from '../../../firebase'
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import Main from '../Main/Main';
-const DashBoard = () =>{
+import BoardList from '../BoardList/BoardList';
+const DashBoard = () => {
     const history = useHistory();
-    const [user,setUser] = useState('');
+    const [user, setUser] = useState('');
 
-    const authListner = () =>{
-        auth.onAuthStateChanged(user=>{
-            if(user){
+    const authListner = () => {
+        auth.onAuthStateChanged(user => {
+            if (user) {
                 setUser(user);
                 console.log(user);
-            }else{
+            } else {
                 history.push('/admin')
             }
 
         })
     }
-    const logout = () =>{
+    const logout = () => {
         auth.signOut();
         history.push('/admin')
     }
-    useEffect(()=>{
+    useEffect(() => {
 
         authListner();
         /*
@@ -33,14 +34,16 @@ const DashBoard = () =>{
             history.push('/admin')
         }
         */
-    },[])
+    }, [])
 
-    return(<div className="DashScreen">
-        <Header user={user} logout={logout}/>
-        
+    return (<div className="DashScreen">
+        <Header user={user} logout={logout} />
+
         <div className="DashBody">
-            <Sidebar/>
+            <Sidebar />
             <Main/>
+           
+       
         </div>
     </div>)
 }
