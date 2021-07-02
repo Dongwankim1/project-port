@@ -3,9 +3,17 @@
 
     justify-content: center;
 }
-
-
 .DashBody{
-    display:flex;
-    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+.DashTableBody{
+    width:100%;
+}
+.DashMainBody{
+
+    
 }

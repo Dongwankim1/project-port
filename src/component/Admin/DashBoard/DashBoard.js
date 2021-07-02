@@ -7,6 +7,7 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import Main from '../Main/Main';
 import BoardList from '../BoardList/BoardList';
+import TableBoard from '../TableBoard/TableBoard';
 const DashBoard = () => {
     const history = useHistory();
     const [user, setUser] = useState('');
@@ -38,12 +39,16 @@ const DashBoard = () => {
 
     return (<div className="DashScreen">
         <Header user={user} logout={logout} />
-
         <div className="DashBody">
-            <Sidebar />
+        <div className="DashTableBody">
+            <TableBoard/>
+        </div>
+        <div className="DashMainBody">
+
             <Main/>
            
        
+        </div>
         </div>
     </div>)
 }
