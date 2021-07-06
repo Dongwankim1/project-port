@@ -2,14 +2,11 @@ import React from 'react';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-const TableRowA = ({row,keyid}) => {
+const TableRowA = ({row,keyid,setCurrentId}) => {
 
-    const handleOnClick = () =>{
-        console.log('asd',keyid);
-    }
 
     return (
-        <TableRow key={keyid} onClick={handleOnClick}>
+        <TableRow key={keyid} onClick={() => setCurrentId(row.id)}>
             <TableCell component="th" scope="row">
                 {row.title}
             </TableCell>

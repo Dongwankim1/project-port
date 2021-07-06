@@ -10,18 +10,18 @@ function App() {
   const user = null;
 
   return (
-  
-      <div className="">
-          <BrowserRouter>
+
+    <div className="">
+      <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} ></Route>
           <Route exact path="/admin" component={Admin} ></Route>
           <Route exact path="/admin/DashBoard" component={DashBoard} ></Route>
         </Switch>
 
-        </BrowserRouter>
-      </div>
-   
+      </BrowserRouter>
+    </div>
+
   );
 }
 

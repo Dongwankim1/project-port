@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Main.css';
 import { useHistory } from 'react-router';
 import Button from '@material-ui/core/Button';
@@ -10,12 +10,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Input } from '@material-ui/core';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState,convertToRaw } from 'draft-js';
+import { EditorState,convertToRaw,ContentState } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html';
 import * as api from '../../../api/database';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import DraftPasteProcessor from 'draft-js/lib/DraftPasteProcessor';
+import {createBoard} from '../../../actions/board';
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Main = () => {
+const Main = ({currentId,setCurrentId}) => {
     const classes = useStyles();
     const [category, setCategory] = useState('');
     const [base64,setBase64] = useState('');
@@ -44,6 +45,8 @@ const Main = () => {
     const [startdate,setStartdate] = useState('2017-05-24');
     const [completedate,setCompletedate] = useState('2017-05-24');
 
+    const boarddata = useSelector((state)=>(currentId? state.board.find((message)=>message.id===currentId):null))
+    const dispatch = useDispatch();
     const history = useHistory();
 
     const [editorState,setEditorState] = useState(() =>EditorState.createEmpty())
@@ -51,16 +54,43 @@ const Main = () => {
         setCategory(event.target.value);
     }
 
+    useEffect(()=>{
+        if(boarddata){
+            setCategory(boarddata.category);
+            setBase64(boarddata.image);
+            setTitle(boarddata.title);
+            setStartdate(boarddata.startdate);
+            setCompletedate(boarddata.completedate);
+            const processedHTML = DraftPasteProcessor.processHTML(boarddata.content)
+            setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(processedHTML)))
+            
+            //setEditorState(boarddata.content);
+        }
+    },[boarddata])
   
 
     const handleSubmit = (e) =>{
         e.preventDefault();
 
-        console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
-        const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-        console.log(startdate);
-        console.log(completedate);
-        const result = api.setDoc(category,title,content,startdate,completedate,base64,history);
+        if(currentId===0){
+            const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+            //console.log(convertToRaw(editorState.getCurrentContent()))
+            dispatch(createBoard(category,title,content,startdate,completedate,base64));
+            //const result = api.setDoc(category,title,content,startdate,completedate,base64,history);
+        }else{
+
+        }
+
+    }
+
+    const clear = () =>{
+        setCategory('');
+        setBase64('');
+        setTitle('');
+        setStartdate('');
+        setCompletedate('');
+        setEditorState(EditorState.createEmpty())
+        setCurrentId(0);
 
     }
 
@@ -183,6 +213,9 @@ const Main = () => {
             </div>
             <div className="Main__Bottom">
 
+                <Button onClick={clear} className="bt__Main" variant="contained" color="primary">
+                    클리어
+                </Button>
                 <Button onClick={handleSubmit} className="bt__Main" variant="contained" color="primary">
                     등록
                 </Button>

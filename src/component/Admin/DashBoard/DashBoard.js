@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import './Dashboard.css';
 import { auth } from '../../../firebase'
 import Header from '../Header/Header';
-import Sidebar from '../Sidebar/Sidebar';
 import Main from '../Main/Main';
-import BoardList from '../BoardList/BoardList';
 import TableBoard from '../TableBoard/TableBoard';
+import { getBoardData } from '../../../actions/board';
+import { useDispatch } from 'react-redux';
 const DashBoard = () => {
     const history = useHistory();
     const [user, setUser] = useState('');
-
+    const [currentId,setCurrentId] = useState(0);
+    const dispatch = useDispatch();
     const authListner = () => {
         auth.onAuthStateChanged(user => {
             if (user) {
                 setUser(user);
-                console.log(user);
+                dispatch(getBoardData());
             } else {
                 history.push('/admin')
             }
@@ -30,25 +30,20 @@ const DashBoard = () => {
     useEffect(() => {
 
         authListner();
-        /*
-        if(!user) {
-            history.push('/admin')
-        }
-        */
     }, [])
 
     return (<div className="DashScreen">
         <Header user={user} logout={logout} />
         <div className="DashBody">
-        <div className="DashTableBody">
-            <TableBoard/>
-        </div>
-        <div className="DashMainBody">
+            <div className="DashTableBody">
+                <TableBoard setCurrentId={setCurrentId} />
+            </div>
+            <div className="DashMainBody">
 
-            <Main/>
-           
-       
-        </div>
+                <Main currentId={currentId} setCurrentId={setCurrentId} />
+
+
+            </div>
         </div>
     </div>)
 }

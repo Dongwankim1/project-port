@@ -1,7 +1,7 @@
 import db from '../firebase';
 
 
-export const setDoc = (category,title,content,startdate,completedate,base64,history) =>{
+export const setDoc = (category,title,content,startdate,completedate,base64) =>{
     db.collection("tb_project").add({
         category:category,
         title:title,
@@ -11,7 +11,7 @@ export const setDoc = (category,title,content,startdate,completedate,base64,hist
         image:base64
     }).then((docRef)=>{
         console.log("Document written with ID",docRef.id);
-        history.push('/admin/DashBoard/list');
+        console.log(docRef);
     }).catch((error)=>{
         alert("Error adding document:",error);
     })

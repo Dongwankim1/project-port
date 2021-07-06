@@ -16,6 +16,7 @@ import * as api from '../../../api/database';
 import TableRowA from './TableRow/TableRow';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import { useSelector } from 'react-redux';
 const useStyles1 = makeStyles((theme) => ({
     root: {
       flexShrink: 0,
@@ -90,13 +91,13 @@ const useStyles1 = makeStyles((theme) => ({
   });
 
 
-const TableBoard = () => {
+const TableBoard = ({setCurrentId}) => {
     const classes = useStyles2();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [rowdata,setRowData] = useState([]);
+    const rowdata = useSelector((state)=>state.board)
+
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowdata.length - page * rowsPerPage);
-  
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
     };
@@ -106,11 +107,6 @@ const TableBoard = () => {
       setPage(0);
     };
 
-    useEffect(async ()=>{
-        const rowsdata = await api.Doclist();
-        console.log(rowsdata);
-        setRowData(rowsdata);
-    },[])
   
     return (
       <TableContainer component={Paper}>
@@ -120,7 +116,7 @@ const TableBoard = () => {
               ? rowdata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rowdata
             ).map((row,keyid) => (
-                <TableRowA row={row} keyid={keyid}/>
+                <TableRowA row={row} keyid={keyid} setCurrentId={setCurrentId}/>
               
             ))}
   
