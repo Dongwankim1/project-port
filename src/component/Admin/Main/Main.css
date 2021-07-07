@@ -34,7 +34,6 @@
 
 .Main__form>div{
     display: flex;
-    justify-content: flex-start;
     align-items: center;
     margin:40px ;
     
@@ -43,4 +42,11 @@
 .MuiFormLabel-root {
     width: 120px;
     margin-right: 30px;
+}
+
+
+.Main__UPLOAD{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

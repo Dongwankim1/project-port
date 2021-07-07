@@ -10,13 +10,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Input } from '@material-ui/core';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState,convertToRaw,ContentState } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html';
 import * as api from '../../../api/database';
 import { useDispatch, useSelector } from 'react-redux';
 import DraftPasteProcessor from 'draft-js/lib/DraftPasteProcessor';
-import {createBoard} from '../../../actions/board';
+import { createBoard, updateBoard } from '../../../actions/board';
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -37,25 +37,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Main = ({currentId,setCurrentId}) => {
+const Main = ({ currentId, setCurrentId }) => {
     const classes = useStyles();
     const [category, setCategory] = useState('');
-    const [base64,setBase64] = useState('');
-    const [title,setTitle] = useState('');
-    const [startdate,setStartdate] = useState('2017-05-24');
-    const [completedate,setCompletedate] = useState('2017-05-24');
+    const [base64, setBase64] = useState('');
+    const [title, setTitle] = useState('');
+    const [startdate, setStartdate] = useState('2017-05-24');
+    const [completedate, setCompletedate] = useState('2017-05-24');
 
-    const boarddata = useSelector((state)=>(currentId? state.board.find((message)=>message.id===currentId):null))
+    const boarddata = useSelector((state) => (currentId ? state.board.find((message) => message.id === currentId) : null))
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [editorState,setEditorState] = useState(() =>EditorState.createEmpty())
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
     const handleChange = (event) => {
         setCategory(event.target.value);
     }
 
-    useEffect(()=>{
-        if(boarddata){
+    useEffect(() => {
+        if (boarddata) {
             setCategory(boarddata.category);
             setBase64(boarddata.image);
             setTitle(boarddata.title);
@@ -63,27 +63,29 @@ const Main = ({currentId,setCurrentId}) => {
             setCompletedate(boarddata.completedate);
             const processedHTML = DraftPasteProcessor.processHTML(boarddata.content)
             setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(processedHTML)))
-            
+
             //setEditorState(boarddata.content);
         }
-    },[boarddata])
-  
+    }, [boarddata])
 
-    const handleSubmit = (e) =>{
+
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(currentId===0){
+        if (currentId === 0) {
             const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
             //console.log(convertToRaw(editorState.getCurrentContent()))
-            dispatch(createBoard(category,title,content,startdate,completedate,base64));
+            dispatch(createBoard(category, title, content, startdate, completedate, base64));
             //const result = api.setDoc(category,title,content,startdate,completedate,base64,history);
-        }else{
-
+        } else {
+            const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+            //console.log(convertToRaw(editorState.getCurrentContent()))
+            dispatch(updateBoard(currentId, category, title, content, startdate, completedate, base64));
         }
 
     }
 
-    const clear = () =>{
+    const clear = () => {
         setCategory('');
         setBase64('');
         setTitle('');
@@ -94,10 +96,10 @@ const Main = ({currentId,setCurrentId}) => {
 
     }
 
-    const handlefileChange= (e)=>{
+    const handlefileChange = (e) => {
         e.preventDefault();
         let files = e.target.files;
-        
+
 
         const reader = new FileReader();
         console.log(reader);
@@ -105,33 +107,33 @@ const Main = ({currentId,setCurrentId}) => {
         for (var i = 0; i < files.length; i++) {
 
             let file = files[i];
-      
+
             // Make new FileReader
             let reader = new FileReader();
-      
+
             // Convert the file to base64 text
             reader.readAsDataURL(file);
-      
+
             // on reader load somthing...
             reader.onload = () => {
-      
-              // Make a fileInfo Object
-              let fileInfo = {
-                name: file.name,
-                type: file.type,
-                size: Math.round(file.size / 1000) + ' kB',
-                base64: reader.result,
-                file: file,
-              };
 
-              setBase64(fileInfo.base64);
+                // Make a fileInfo Object
+                let fileInfo = {
+                    name: file.name,
+                    type: file.type,
+                    size: Math.round(file.size / 1000) + ' kB',
+                    base64: reader.result,
+                    file: file,
+                };
+
+                setBase64(fileInfo.base64);
             }
         }
     }
 
     return (
         <div className="Main">
-            
+
             <div className="Main__Content">
                 <form className="Main__form">
                     <div>
@@ -153,7 +155,7 @@ const Main = ({currentId,setCurrentId}) => {
                     </div>
                     <div className="">
                         <InputLabel>타이틀</InputLabel>
-                        <Input onChange={(e)=>setTitle(e.target.value)} value={title}/>
+                        <Input onChange={(e) => setTitle(e.target.value)} value={title} />
                     </div>
 
                     <div className="Main_dateField">
@@ -167,7 +169,7 @@ const Main = ({currentId,setCurrentId}) => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            onChange={(e)=>setStartdate(e.target.value)}
+                            onChange={(e) => setStartdate(e.target.value)}
                         />
                         ~
                         <TextField
@@ -179,7 +181,7 @@ const Main = ({currentId,setCurrentId}) => {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            onChange={(e)=>setCompletedate(e.target.value)}
+                            onChange={(e) => setCompletedate(e.target.value)}
                         />
 
 
@@ -196,18 +198,26 @@ const Main = ({currentId,setCurrentId}) => {
                         />
                     </div>
 
-                    <div>
-                        <Button
-                            variant="contained"
-                            component="label"
-                        >
-                            Upload File
-                            <input
-                                onChange={handlefileChange}
-                                type="file"
-                                hidden
-                            />
-                        </Button>
+                    <div className="Main__UPLOAD">
+                        <div className="Main__UPLOADBUTTON">
+                            <Button
+                                variant="contained"
+                                component="label"
+                            >
+                                Upload File
+                                <input
+                                    onChange={handlefileChange}
+                                    type="file"
+                                    hidden
+                                />
+                            </Button>
+
+                        </div>
+
+
+                        <div className="MAIN_UPLOADIMAGE">
+                            {base64 ? <img src={base64}></img> :null}
+                        </div>
                     </div>
                 </form>
             </div>

@@ -14,8 +14,26 @@ export const getBoardData = () => async (dispatch) =>{
 export const createBoard = (category,title,content,startdate,completedate,base64) => async (dispatch)=>{
     try {
         const data = await api.setDoc(category,title,content,startdate,completedate,base64);
-        console.log(data);
         await dispatch({type:CREATE,payload:data})
+    } catch (error) {
+        
+    }
+}
+
+export const updateBoard = (id,category,title,content,startdate,completedate,base64) => async (dispatch)=>{
+    try {
+
+        const data = await api.DocUpdate(id,category,title,content,startdate,completedate,base64);
+        await dispatch({type:UPDATE,payload:data})
+    } catch (error) {
+        
+    }
+}
+
+export const deleteBoard =(id) => async (dispatch) =>{
+    try {
+        await api.DocDelete(id)
+        await dispatch({type:DELETE,payload:id})
     } catch (error) {
         
     }
