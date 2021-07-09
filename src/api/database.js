@@ -8,7 +8,7 @@ export const setDoc = async (category,title,content,startdate,completedate,base6
         content:content,
         startdate:startdate,
         completedate:completedate,
-        image:base64
+        image:[...base64]
     }).then((docRef)=>{
         console.log("Document written with ID",docRef.id);
         return docRef.get().then((doc) => {

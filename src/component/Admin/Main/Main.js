@@ -17,6 +17,7 @@ import * as api from '../../../api/database';
 import { useDispatch, useSelector } from 'react-redux';
 import DraftPasteProcessor from 'draft-js/lib/DraftPasteProcessor';
 import { createBoard, updateBoard } from '../../../actions/board';
+import ImageBoard from '../ImageAdd/ImageBoard';
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 const Main = ({ currentId, setCurrentId }) => {
     const classes = useStyles();
     const [category, setCategory] = useState('');
-    const [base64, setBase64] = useState('');
+    const [base64, setBase64] = useState(['a',]);
     const [title, setTitle] = useState('');
     const [startdate, setStartdate] = useState('2017-05-24');
     const [completedate, setCompletedate] = useState('2017-05-24');
@@ -66,16 +67,26 @@ const Main = ({ currentId, setCurrentId }) => {
 
             //setEditorState(boarddata.content);
         }
-    }, [boarddata])
+    }, [boarddata,base64])
+    
 
+    const clear = () => {
+        setCategory('');
+        setBase64(['a',]);
+        setTitle('');
+        setStartdate('');
+        setCompletedate('');
+        setEditorState(EditorState.createEmpty())
+        setCurrentId(0);
 
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (currentId === 0) {
             const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
             //console.log(convertToRaw(editorState.getCurrentContent()))
-            dispatch(createBoard(category, title, content, startdate, completedate, base64));
+            dispatch(createBoard(category, title, content, startdate, completedate, base64,clear));
             //const result = api.setDoc(category,title,content,startdate,completedate,base64,history);
         } else {
             const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
@@ -85,52 +96,8 @@ const Main = ({ currentId, setCurrentId }) => {
 
     }
 
-    const clear = () => {
-        setCategory('');
-        setBase64('');
-        setTitle('');
-        setStartdate('');
-        setCompletedate('');
-        setEditorState(EditorState.createEmpty())
-        setCurrentId(0);
 
-    }
-
-    const handlefileChange = (e) => {
-        e.preventDefault();
-        let files = e.target.files;
-
-
-        const reader = new FileReader();
-        console.log(reader);
-
-        for (var i = 0; i < files.length; i++) {
-
-            let file = files[i];
-
-            // Make new FileReader
-            let reader = new FileReader();
-
-            // Convert the file to base64 text
-            reader.readAsDataURL(file);
-
-            // on reader load somthing...
-            reader.onload = () => {
-
-                // Make a fileInfo Object
-                let fileInfo = {
-                    name: file.name,
-                    type: file.type,
-                    size: Math.round(file.size / 1000) + ' kB',
-                    base64: reader.result,
-                    file: file,
-                };
-
-                setBase64(fileInfo.base64);
-            }
-        }
-    }
-
+   
     return (
         <div className="Main">
 
@@ -198,27 +165,7 @@ const Main = ({ currentId, setCurrentId }) => {
                         />
                     </div>
 
-                    <div className="Main__UPLOAD">
-                        <div className="Main__UPLOADBUTTON">
-                            <Button
-                                variant="contained"
-                                component="label"
-                            >
-                                Upload File
-                                <input
-                                    onChange={handlefileChange}
-                                    type="file"
-                                    hidden
-                                />
-                            </Button>
-
-                        </div>
-
-
-                        <div className="MAIN_UPLOADIMAGE">
-                            {base64 ? <img src={base64}></img> :null}
-                        </div>
-                    </div>
+                    <ImageBoard base64={base64} setBase64={setBase64}/>
                 </form>
             </div>
             <div className="Main__Bottom">

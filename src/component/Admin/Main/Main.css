@@ -44,9 +44,3 @@
     margin-right: 30px;
 }
 
-
-.Main__UPLOAD{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}

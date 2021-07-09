@@ -11,10 +11,11 @@ export const getBoardData = () => async (dispatch) =>{
     }
 }
 
-export const createBoard = (category,title,content,startdate,completedate,base64) => async (dispatch)=>{
+export const createBoard = (category,title,content,startdate,completedate,base64,clear) => async (dispatch)=>{
     try {
         const data = await api.setDoc(category,title,content,startdate,completedate,base64);
         await dispatch({type:CREATE,payload:data})
+        clear();
     } catch (error) {
         
     }

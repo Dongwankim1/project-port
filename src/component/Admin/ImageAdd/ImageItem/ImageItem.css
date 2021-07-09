@@ -1,0 +1,11 @@
+.ImageItem__Main{
+    display: flex;
+    justify-content:space-between;
+    margin:20px;
+    
+}
+
+.ImageItem__MainImage > img{
+    width:200px;
+    height:200px;
+}
