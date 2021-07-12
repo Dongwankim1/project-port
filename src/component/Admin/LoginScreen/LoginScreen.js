@@ -30,13 +30,7 @@ const LoginScreen = () =>{
 
 
     return <div className="loginScreen">
-        <div className="loginScreen__background">
-            <img className="loginScreen__logo" src={logo}></img>
-
-         
-            
-        </div>
-
+      
         <div className="loginScreen__body">
            
                 <div className="SigninScreen">

@@ -1,0 +1,19 @@
+footer{
+    width:100%;
+    height:10%;
+
+}
+
+.Footer__wrap{
+    display: flex;
+    
+    align-items: center;
+}
+.Footer__Container{
+    margin: 20px;
+}
+.Footer__Container >span{
+    font-size:2em;
+    
+    font-weight: 700;
+}

@@ -6,20 +6,25 @@ import Home from './component/Home/Home';
 import Admin from './component/Admin/Admin';
 import DashBoard from './component/Admin/DashBoard/DashBoard';
 import BoardList from './component/Admin/BoardList/BoardList';
+import Header from './component/Home/Header/Header';
+import Footer from './component/Home/Footer/Footer';
 function App() {
   const user = null;
 
   return (
 
-    <div className="">
+    <div className="App">
+      <Header/>
       <BrowserRouter>
         <Switch>
+        
           <Route exact path="/" component={Home} ></Route>
           <Route exact path="/admin" component={Admin} ></Route>
           <Route exact path="/admin/DashBoard" component={DashBoard} ></Route>
         </Switch>
 
       </BrowserRouter>
+      <Footer/>
     </div>
 
   );

@@ -1,28 +1,33 @@
-import{
-    BadgeCheckIcon,
-    CollectionIcon,
-    HomeIcon,
-    LightningBoltIcon,
-    SearchIcon,
-    UserIcon,
-} from "@heroicons/react/outline";
-
+import FacebookIcon from '@material-ui/icons/Facebook';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import logo from "../../../assets/images/logo.png"
 import HeaderItem from "./HeaderItem/HeaderItem";
+
+import './Header.css'
+
 const Header = () =>{
     return(
-        <header className='flex flex-col sm:flex-row m-5 justify-between items-center h-auto'>
-            <div className='flex lfex-grow justify-evenly max-w-2xl'>
-                <HeaderItem title='HOME' Icon={HomeIcon}/>
-                <HeaderItem title='TRENDING' Icon={LightningBoltIcon}/>
-                <HeaderItem title='VERIFIED' Icon={BadgeCheckIcon}/>
-                <HeaderItem title='COLECTIONS' Icon={CollectionIcon}/>
-                <HeaderItem title='SEARCH' Icon={SearchIcon}/>
-                <HeaderItem title='ACCOUNT' Icon={UserIcon}/>
-            </div>
+        <header className='Header flex flex-col sm:flex-row m-5 justify-between items-center h-auto'>
+        <div className="wrapper">
+            <div className="left">
+                <a href="https://github.com/Dongwankim1">
+                <FacebookIcon fontSize="large"/>
+                </a>
+                <a href="https://github.com/Dongwankim1">
+                <GitHubIcon fontSize="large"/>
+                </a>
+                <a href="https://www.linkedin.com/in/%EB%94%94%EC%B0%8C-hip-05a2791a2/">
+                <LinkedInIcon fontSize="large"/>
+                </a>
 
-            <img className="object-contain" src={logo} width='100' height='100'/>
-           
+            </div>
+            <div className="right">
+                <p className="logo">
+                Dizzy
+                </p>
+            </div>
+        </div> 
         </header>
     )
 }
