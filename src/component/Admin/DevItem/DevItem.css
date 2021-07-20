@@ -1,0 +1,7 @@
+.DevItem {
+    display: flex;
+    margin: 20px;
+}
+.DevItem > label{
+    font-size: 30px !important;
+}

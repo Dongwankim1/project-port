@@ -8,7 +8,6 @@ import { InputLabel } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Input } from '@material-ui/core';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -18,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DraftPasteProcessor from 'draft-js/lib/DraftPasteProcessor';
 import { createBoard, updateBoard } from '../../../actions/board';
 import ImageBoard from '../ImageAdd/ImageBoard';
+import DevItem from '../DevItem/DevItem';
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -42,10 +42,11 @@ const Main = ({ currentId, setCurrentId }) => {
     const classes = useStyles();
     const [category, setCategory] = useState('');
     const [base64, setBase64] = useState(['a',]);
+    const [devstuff, setDevstuff] = useState([]);
     const [title, setTitle] = useState('');
     const [startdate, setStartdate] = useState('2017-05-24');
     const [completedate, setCompletedate] = useState('2017-05-24');
-
+    const [devitem,setDevItem] = useState([]);
     const boarddata = useSelector((state) => (currentId ? state.board.find((message) => message.id === currentId) : null))
     const dispatch = useDispatch();
     const history = useHistory();
@@ -57,18 +58,29 @@ const Main = ({ currentId, setCurrentId }) => {
 
     useEffect(() => {
         if (boarddata) {
+            console.log(boarddata);
             setCategory(boarddata.category);
             setBase64(boarddata.image);
             setTitle(boarddata.title);
             setStartdate(boarddata.startdate);
+            setDevstuff(boarddata.devstuff)
             setCompletedate(boarddata.completedate);
             const processedHTML = DraftPasteProcessor.processHTML(boarddata.content)
             setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(processedHTML)))
-
+            
             //setEditorState(boarddata.content);
         }
+
+       
+        
+
     }, [boarddata,base64])
     
+    useEffect( async ()=>{
+        setDevItem(await api.ListDevDoc())
+        console.log(devitem)
+        console.log('aa')
+    },[])
 
     const clear = () => {
         setCategory('');
@@ -76,8 +88,10 @@ const Main = ({ currentId, setCurrentId }) => {
         setTitle('');
         setStartdate('');
         setCompletedate('');
+        setDevstuff([]);
         setEditorState(EditorState.createEmpty())
         setCurrentId(0);
+
 
     }
     const handleSubmit = (e) => {
@@ -85,17 +99,22 @@ const Main = ({ currentId, setCurrentId }) => {
 
         if (currentId === 0) {
             const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-            //console.log(convertToRaw(editorState.getCurrentContent()))
-            dispatch(createBoard(category, title, content, startdate, completedate, base64,clear));
-            //const result = api.setDoc(category,title,content,startdate,completedate,base64,history);
+
+            dispatch(createBoard(category, title, content, startdate, completedate,devstuff, base64,clear));
+     
         } else {
             const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-            //console.log(convertToRaw(editorState.getCurrentContent()))
-            dispatch(updateBoard(currentId, category, title, content, startdate, completedate, base64));
+
+            dispatch(updateBoard(currentId, category, title, content, startdate, completedate,devstuff, base64,clear));
         }
 
     }
 
+    const devhandleChange =(e)=>{
+        setDevstuff([...devstuff,e.target.value])
+
+        console.log(devstuff);
+    }
 
    
     return (
@@ -153,7 +172,31 @@ const Main = ({ currentId, setCurrentId }) => {
 
 
                     </div>
+                    <div className="">
+                        <InputLabel>개발도구</InputLabel>
+                        <Select
+                            value={category}
+                            onChange={devhandleChange}
+                            displayEmpty
+                            className={classes.selectEmpty}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value="" disabled>
+                                Placeholder
+                            </MenuItem>
+                            {devitem ? devitem.map((item,index)=>(
+                                
+                            <MenuItem key={index} value={item}>{item}</MenuItem>
+                         
+                                )): null}
 
+                            
+                        </Select>
+                        
+                    </div>
+                    <div>
+                    <InputLabel>개발도구 목록</InputLabel> {devstuff ? devstuff.map((item,index)=>(<DevItem title={item} keys={index} devstuff={devstuff} setDevstuff={setDevstuff}/>)) : null}
+                    </div>
                     <div>
                         <InputLabel>상세내용</InputLabel>
                         <Editor

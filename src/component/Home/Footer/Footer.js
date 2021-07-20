@@ -15,6 +15,9 @@ const Footer = () =>{
                 <span>zkdlwu94@gmail.com</span>
                     </div>
             </div>
+            <div className="small footer-small">
+                Made In Dizzy . © 2021.
+            </div>
         </footer>
     )
 }

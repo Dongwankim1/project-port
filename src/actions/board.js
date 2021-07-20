@@ -11,9 +11,9 @@ export const getBoardData = () => async (dispatch) =>{
     }
 }
 
-export const createBoard = (category,title,content,startdate,completedate,base64,clear) => async (dispatch)=>{
+export const createBoard = (category,title,content,startdate,completedate,devstuff,base64,clear) => async (dispatch)=>{
     try {
-        const data = await api.setDoc(category,title,content,startdate,completedate,base64);
+        const data = await api.setDoc(category,title,content,startdate,completedate,devstuff,base64);
         await dispatch({type:CREATE,payload:data})
         clear();
     } catch (error) {
@@ -21,11 +21,12 @@ export const createBoard = (category,title,content,startdate,completedate,base64
     }
 }
 
-export const updateBoard = (id,category,title,content,startdate,completedate,base64) => async (dispatch)=>{
+export const updateBoard = (id,category,title,content,startdate,completedate,devstuff,base64,clear) => async (dispatch)=>{
     try {
 
-        const data = await api.DocUpdate(id,category,title,content,startdate,completedate,base64);
+        const data = await api.DocUpdate(id,category,title,content,startdate,completedate,devstuff,base64);
         await dispatch({type:UPDATE,payload:data})
+        clear();
     } catch (error) {
         
     }

@@ -38,9 +38,11 @@ const MainGrid = () => {
   return <div className={classes.root}>
     <div className="MainGrid">
       
-      <Nav />
+     
 
       <div className="card card-4">
+      <Nav />
+
         <Grid container spacing={3}>
           {console.log('aaaaaa', DocList)}
           {DocList.length !== 0 ? DocList.map((item, index) => (

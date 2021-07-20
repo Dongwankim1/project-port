@@ -107,6 +107,7 @@ const TableBoard = ({setCurrentId}) => {
       setPage(0);
     };
 
+    console.log('rowdata',rowdata);
   
     return (
       <TableContainer component={Paper}>
@@ -116,7 +117,7 @@ const TableBoard = ({setCurrentId}) => {
               ? rowdata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rowdata
             ).map((row,keyid) => (
-                <TableRowA row={row} keyid={keyid} setCurrentId={setCurrentId}/>
+              (row ? <TableRowA row={row} keyid={keyid} setCurrentId={setCurrentId}/> : null)
               
             ))}
   

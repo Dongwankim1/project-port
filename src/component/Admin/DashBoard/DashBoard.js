@@ -7,6 +7,7 @@ import Main from '../Main/Main';
 import TableBoard from '../TableBoard/TableBoard';
 import { getBoardData } from '../../../actions/board';
 import { useDispatch } from 'react-redux';
+import DevStuff from '../DevStuff/DevStuff';
 const DashBoard = () => {
     const history = useHistory();
     const [user, setUser] = useState('');
@@ -35,6 +36,7 @@ const DashBoard = () => {
     return (<div className="DashScreen">
         <Header user={user} logout={logout} />
         <div className="DashBody">
+        <DevStuff/>
             <div className="DashTableBody">
                 <TableBoard setCurrentId={setCurrentId} />
             </div>
